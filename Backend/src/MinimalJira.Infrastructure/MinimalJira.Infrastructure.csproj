@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MinimalJira.Application\MinimalJira.Application.csproj" />
+  </ItemGroup>
+
 </Project>
