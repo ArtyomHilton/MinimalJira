@@ -29,15 +29,12 @@ var app = builder.Build();
 
 app.UseExceptionHandler(e => { });
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.RoutePrefix = String.Empty;
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    });
-}
+    options.RoutePrefix = String.Empty;
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+});
 
 app.UseHttpsRedirection();
 app.MapControllers();
