@@ -1,13 +1,16 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MinimalJira.Application.DTOs;
 using MinimalJira.Persistence.Context;
 
 namespace MinimalJira.Application.UseCases.Task.GetTasks;
 
-public class GetTasksUseCase(MinimalJiraDbContext dbContext) : IGetTasksUseCase
+public class GetTasksUseCase(MinimalJiraDbContext dbContext, ILogger<GetTasksUseCase> logger) : IGetTasksUseCase
 {
     public async Task<ICollection<TaskDataResponse>> ExecuteAsync(GetTasksQuery query, CancellationToken cancellationToken)
     {
+        logger.LogInformation("Началось получение задач для проекта с Id: {Id} и статусом {IsComplete}", query.ProjectId, query.IsComplete);
+        
         var queryTasks = dbContext.Tasks.AsQueryable();
 
         if (query.IsComplete is not null)
@@ -32,6 +35,8 @@ public class GetTasksUseCase(MinimalJiraDbContext dbContext) : IGetTasksUseCase
             .OrderByDescending(t => t.CreatedAt)
             .ToListAsync(cancellationToken);
 
+        logger.LogInformation("Задачи для проекта с Id: {Id} и статусом {IsComplete} успешно получены", query.ProjectId, query.IsComplete);
+        
         return tasks;
     }
 }

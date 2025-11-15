@@ -1,16 +1,20 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MinimalJira.Domain.Exceptions;
 using MinimalJira.Persistence.Context;
 
 namespace MinimalJira.Application.UseCases.Task.UpdateTask;
 
-public class UpdateTaskUseCase(MinimalJiraDbContext dbContext) : IUpdateTaskUseCase
+public class UpdateTaskUseCase(MinimalJiraDbContext dbContext, ILogger<UpdateTaskUseCase> logger) : IUpdateTaskUseCase
 {
     public async System.Threading.Tasks.Task ExecuteAsync(UpdateTaskCommand command,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Началось обновление задачи с Id: {Id}", command.Id);
+        
         if (!await dbContext.Projects.AnyAsync(p => p.Id == command.ProjectId, cancellationToken))
         {
+            logger.LogInformation("Не удалось найти проект с Id: {Id}", command.ProjectId);
             throw new NotFoundException($"{nameof(Domain.Entities.Project)} c Id: {command.ProjectId} не найден!");
         }
 
@@ -31,7 +35,10 @@ public class UpdateTaskUseCase(MinimalJiraDbContext dbContext) : IUpdateTaskUseC
 
         if (updateResult == 0)
         {
+            logger.LogInformation("Не удалось найти задачу Id: {Id}", command.Id);
             throw new NotFoundException($"{nameof(Domain.Entities.Task)} с Id: {command.Id} не найден!");
         }
+        
+        logger.LogInformation("Задача с Id: {Id} успешно обновлена", command.Id);
     }
 }
