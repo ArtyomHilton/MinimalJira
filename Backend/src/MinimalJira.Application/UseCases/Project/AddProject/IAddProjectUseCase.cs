@@ -2,5 +2,5 @@ namespace MinimalJira.Application.UseCases.Project.AddProject;
 
 public interface IAddProjectUseCase
 {
-    Task<Guid> Execute(AddProjectCommand command, CancellationToken cancellationToken);
+    Task<Guid> ExecuteAsync(AddProjectCommand command, CancellationToken cancellationToken);
 }

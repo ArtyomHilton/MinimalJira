@@ -4,5 +4,5 @@ namespace MinimalJira.Application.UseCases.Project.GetProjectById;
 
 public interface IGetProjectByIdUseCase
 {
-    Task<ProjectDataResponse> Execute(GetProjectByIdQuery query, CancellationToken cancellationToken);
+    Task<ProjectDataResponse> ExecuteAsync(GetProjectByIdQuery query, CancellationToken cancellationToken);
 }

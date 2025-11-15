@@ -5,7 +5,7 @@ namespace MinimalJira.Application.UseCases.Project.AddProject;
 
 public class AddProjectUseCase(MinimalJiraDbContext dbContext) : IAddProjectUseCase
 {
-    public async Task<Guid> Execute(AddProjectCommand command, CancellationToken cancellationToken)
+    public async Task<Guid> ExecuteAsync(AddProjectCommand command, CancellationToken cancellationToken)
     {
         var project = command.ToEntity();
         

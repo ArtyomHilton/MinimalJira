@@ -6,7 +6,7 @@ namespace MinimalJira.Application.UseCases.Project.UpdateProject;
 
 public class UpdateProjectUseCase(MinimalJiraDbContext dbContext) : IUpdateProjectUseCase
 {
-    public async Task Execute(UpdateProjectCommand command, CancellationToken cancellationToken)
+    public async System.Threading.Tasks.Task ExecuteAsync(UpdateProjectCommand command, CancellationToken cancellationToken)
     {
         
         var updateResult = await dbContext.Projects.Where(p => p.Id == command.Id)
@@ -20,7 +20,7 @@ public class UpdateProjectUseCase(MinimalJiraDbContext dbContext) : IUpdateProje
 
         if (updateResult == 0)
         {
-            throw new NotFoundException($"Проект с Id: {command.Id} не найден!");
+            throw new NotFoundException($"{nameof(Domain.Entities.Project)} с Id: {command.Id} не найден!");
         }
     }
 }

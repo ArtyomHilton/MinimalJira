@@ -4,6 +4,11 @@ using MinimalJira.Application.UseCases.Project.DeleteProject;
 using MinimalJira.Application.UseCases.Project.GetProjectById;
 using MinimalJira.Application.UseCases.Project.GetProjects;
 using MinimalJira.Application.UseCases.Project.UpdateProject;
+using MinimalJira.Application.UseCases.Task.AddTask;
+using MinimalJira.Application.UseCases.Task.DeleteTask;
+using MinimalJira.Application.UseCases.Task.GetTaskById;
+using MinimalJira.Application.UseCases.Task.GetTasks;
+using MinimalJira.Application.UseCases.Task.UpdateTask;
 
 namespace MinimalJira.Application.Extensions;
 
@@ -22,5 +27,10 @@ public static class DependencyInjection
             .AddScoped<IGetProjectsUseCase, GetProjectsUseCase>()
             .AddScoped<IGetProjectByIdUseCase, GetProjectByIdUseCase>()
             .AddScoped<IUpdateProjectUseCase, UpdateProjectUseCase>()
-            .AddScoped<IDeleteProjectUseCase, DeleteProjectUseCase>();
+            .AddScoped<IDeleteProjectUseCase, DeleteProjectUseCase>()
+            .AddScoped<IAddTaskUseCase, AddTaskUseCase>()
+            .AddScoped<IGetTasksUseCase, GetTasksUseCase>()
+            .AddScoped<IGetTaskByIdUseCase, GetTaskByIdUseCase>()
+            .AddScoped<IUpdateTaskUseCase, UpdateTaskUseCase>()
+            .AddScoped<IDeleteTaskUseCase, DeleteTaskUseCase>();
 }

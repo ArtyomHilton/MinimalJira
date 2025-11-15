@@ -7,7 +7,7 @@ namespace MinimalJira.Application.UseCases.Project.GetProjectById;
 
 public class GetProjectByIdUseCase(MinimalJiraDbContext dbContext) : IGetProjectByIdUseCase
 {
-    public async Task<ProjectDataResponse> Execute(GetProjectByIdQuery query, CancellationToken cancellationToken)
+    public async Task<ProjectDataResponse> ExecuteAsync(GetProjectByIdQuery query, CancellationToken cancellationToken)
     {
         var project = await dbContext.Projects
             .Include(p => p.Tasks)

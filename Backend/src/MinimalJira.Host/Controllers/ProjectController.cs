@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using MinimalJira.Application.DTOs;
 using MinimalJira.Application.UseCases.Project.AddProject;
 using MinimalJira.Application.UseCases.Project.DeleteProject;
 using MinimalJira.Application.UseCases.Project.GetProjectById;
@@ -21,7 +20,7 @@ public class ProjectController : ControllerBase
         [FromServices] IAddProjectUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var projectId = await useCase.Execute(request.ToCommand(), cancellationToken);
+        var projectId = await useCase.ExecuteAsync(request.ToCommand(), cancellationToken);
 
         return CreatedAtAction(nameof(GetProject), new { id = projectId }, new { id = projectId });
     }
@@ -32,7 +31,7 @@ public class ProjectController : ControllerBase
         [FromServices] IGetProjectsUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var result = await useCase.Execute(pagination.ToQuery(), cancellationToken);
+        var result = await useCase.ExecuteAsync(pagination.ToQuery(), cancellationToken);
 
         return Ok(result.ToResponse());
     }
@@ -43,7 +42,7 @@ public class ProjectController : ControllerBase
         [FromServices] IGetProjectByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var response = await useCase.Execute(ProjectMappers.ToQuery(id), cancellationToken);
+        var response = await useCase.ExecuteAsync(ProjectMappers.ToQuery(id), cancellationToken);
 
         return Ok(response.ToResponse());
     }
@@ -56,7 +55,7 @@ public class ProjectController : ControllerBase
         CancellationToken cancellationToken)
     {
         Console.WriteLine(request.ToString());
-        await useCase.Execute(request.ToCommand(id), cancellationToken);
+        await useCase.ExecuteAsync(request.ToCommand(id), cancellationToken);
 
         return NoContent();
     }
@@ -67,7 +66,7 @@ public class ProjectController : ControllerBase
         [FromServices] IDeleteProjectUseCase useCase,
         CancellationToken cancellationToken)
     {
-        await useCase.Execute(ProjectMappers.ToCommand(id), cancellationToken);
+        await useCase.ExecuteAsync(ProjectMappers.ToCommand(id), cancellationToken);
 
         return NoContent();
     }

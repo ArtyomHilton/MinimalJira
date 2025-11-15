@@ -2,5 +2,5 @@ namespace MinimalJira.Application.UseCases.Project.DeleteProject;
 
 public interface IDeleteProjectUseCase
 {
-    Task Execute(DeleteProjectCommand command, CancellationToken cancellationToken);
+    System.Threading.Tasks.Task ExecuteAsync(DeleteProjectCommand command, CancellationToken cancellationToken);
 }

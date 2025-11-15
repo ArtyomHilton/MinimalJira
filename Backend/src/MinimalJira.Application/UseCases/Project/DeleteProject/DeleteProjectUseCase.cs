@@ -6,7 +6,7 @@ namespace MinimalJira.Application.UseCases.Project.DeleteProject;
 
 public class DeleteProjectUseCase(MinimalJiraDbContext dbContext) : IDeleteProjectUseCase
 {
-    public async Task Execute(DeleteProjectCommand command, CancellationToken cancellationToken)
+    public async System.Threading.Tasks.Task ExecuteAsync(DeleteProjectCommand command, CancellationToken cancellationToken)
     {
         var deleteResult = await dbContext.Projects
             .Where(p => p.Id == command.Id)
