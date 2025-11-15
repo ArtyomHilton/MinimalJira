@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using MinimalJira.Application.UseCases.Project.AddProject;
 using MinimalJira.Application.UseCases.Project.DeleteProject;
@@ -15,11 +16,20 @@ namespace MinimalJira.Host.Controllers;
 public class ProjectController : ControllerBase
 {
     [HttpPost]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> AddProject([FromBody] AddProjectRequest request,
         [FromServices] IAddProjectUseCase useCase,
+        [FromServices] IValidator<AddProjectRequest> validator,
         CancellationToken cancellationToken)
     {
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.ToResponse());
+        }
+        
         var projectId = await useCase.ExecuteAsync(request.ToCommand(), cancellationToken);
 
         return CreatedAtAction(nameof(GetProject), new { id = projectId }, new { id = projectId });
@@ -48,13 +58,21 @@ public class ProjectController : ControllerBase
     }
     
     [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateProject([FromRoute] Guid id, 
         [FromBody] UpdateProjectRequest request,
-        [FromServices] IUpdateProjectUseCase useCase, 
+        [FromServices] IUpdateProjectUseCase useCase,
+        [FromServices] IValidator<UpdateProjectRequest> validator,
         CancellationToken cancellationToken)
     {
-        Console.WriteLine(request.ToString());
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.ToResponse());
+        }
+        
         await useCase.ExecuteAsync(request.ToCommand(id), cancellationToken);
 
         return NoContent();

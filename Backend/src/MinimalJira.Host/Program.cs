@@ -1,4 +1,6 @@
+using FluentValidation;
 using MinimalJira.Application.Extensions;
+using MinimalJira.Host.Validators;
 using MinimalJira.Infrastructure.Extensions;
 using MinimalJira.Persistence.Extensions;
 
@@ -9,6 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddUseCases();
 builder.Services.AddDbContext(builder.Configuration);
 builder.Services.AddDistributedCache(builder.Configuration);
+builder.Services.AddValidatorsFromAssemblyContaining<AddProjectRequestValidator>();
 builder.Services.AddControllers();
 
 var app = builder.Build();
