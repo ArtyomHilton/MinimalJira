@@ -1,5 +1,7 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using MinimalJira.Domain.Entities;
+using Task = MinimalJira.Domain.Entities.Task;
 
 namespace MinimalJira.Persistence.Context;
 
@@ -17,4 +19,7 @@ public class MinimalJiraDbContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
+    
+    public DbSet<Project> Projects => Set<Project>();
+    public DbSet<Task> Tasks => Set<Task>();
 }
