@@ -1,5 +1,6 @@
 using FluentValidation;
 using MinimalJira.Application.Extensions;
+using MinimalJira.Host.Middleware;
 using MinimalJira.Host.Validators;
 using MinimalJira.Infrastructure.Extensions;
 using MinimalJira.Persistence.Extensions;
@@ -22,7 +23,11 @@ builder.Services.AddDistributedCache(builder.Configuration);
 builder.Services.AddValidatorsFromAssemblyContaining<AddProjectRequestValidator>();
 builder.Services.AddControllers();
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 var app = builder.Build();
+
+app.UseExceptionHandler(e => { });
 
 if (app.Environment.IsDevelopment())
 {
