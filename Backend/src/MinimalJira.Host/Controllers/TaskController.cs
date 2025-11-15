@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using MinimalJira.Application.UseCases.Task.AddTask;
 using MinimalJira.Application.UseCases.Task.DeleteTask;
@@ -15,11 +16,20 @@ namespace MinimalJira.Host.Controllers;
 public class TaskController : ControllerBase
 {
     [HttpPost]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> AddTask([FromBody] AddTaskRequest request,
         [FromServices] IAddTaskUseCase useCase,
+        [FromServices] IValidator<AddTaskRequest> validator,
         CancellationToken cancellationToken)
     {
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.ToResponse());
+        }
+
         var taskId = await useCase.ExecuteAsync(request.ToCommand(), cancellationToken);
 
         return CreatedAtAction(nameof(GetTask), new { id = taskId }, new { id = taskId });
@@ -52,8 +62,16 @@ public class TaskController : ControllerBase
     public async Task<IActionResult> UpdateTask([FromRoute] Guid id,
         [FromBody] UpdateTaskRequest request,
         [FromServices] IUpdateTaskUseCase useCase,
+        [FromServices] IValidator<UpdateTaskRequest> validator,
         CancellationToken cancellationToken)
     {
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.ToResponse());
+        }
+        
         await useCase.ExecuteAsync(request.ToCommand(id), cancellationToken);
 
         return NoContent();
