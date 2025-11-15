@@ -3,8 +3,16 @@ using MinimalJira.Application.Extensions;
 using MinimalJira.Host.Validators;
 using MinimalJira.Infrastructure.Extensions;
 using MinimalJira.Persistence.Extensions;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
