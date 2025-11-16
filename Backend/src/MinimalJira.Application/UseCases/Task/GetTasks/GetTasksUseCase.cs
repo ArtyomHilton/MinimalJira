@@ -25,7 +25,7 @@ public class GetTasksUseCase(
         {
             return cacheTasks;
         }
-        
+
         var queryTasks = dbContext.Tasks.AsQueryable();
 
         if (query.IsComplete is not null)
@@ -48,10 +48,11 @@ public class GetTasksUseCase(
                 IsComplete = t.IsComplete,
             })
             .OrderByDescending(t => t.CreatedAt)
+            .AsNoTracking()
             .ToListAsync(cancellationToken);
 
         await cacheService.SetAsync(key, tasks, 5, cancellationToken);
-        
+
         logger.LogInformation("Задачи для проекта с Id: {Id} и статусом {IsComplete} успешно получены", query.ProjectId,
             query.IsComplete);
 

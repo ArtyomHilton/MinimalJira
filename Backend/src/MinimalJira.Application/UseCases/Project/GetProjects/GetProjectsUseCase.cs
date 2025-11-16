@@ -46,6 +46,7 @@ public class GetProjectsUseCase(
             .OrderBy(x => x.CreatedAt)
             .Skip((query.Page - 1) * query.PageSize)
             .Take(query.PageSize)
+            .AsNoTracking()
             .ToListAsync(cancellationToken);
 
         await cacheService.SetAsync(key, projects, 5, cancellationToken);
