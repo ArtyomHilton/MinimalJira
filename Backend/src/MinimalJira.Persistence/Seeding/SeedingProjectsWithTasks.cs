@@ -5,6 +5,9 @@ using Task = System.Threading.Tasks.Task;
 
 namespace MinimalJira.Persistence.Seeding;
 
+/// <summary>
+/// Сидер данных в БД.
+/// </summary>
 public static class SeedingProjectsWithTasks
 {
     public static void SeedingConfigure(DbContextOptionsBuilder builder)
