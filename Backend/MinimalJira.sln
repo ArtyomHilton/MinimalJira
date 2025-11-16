@@ -20,6 +20,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution-items", "solution-
 		..\.gitignore = ..\.gitignore
 		..\README.md = ..\README.md
 		..\Задание.md = ..\Задание.md
+		Dockerfile = Dockerfile
+		.dockerignore = .dockerignore
+		..\DevOps\docker-compose.yaml = ..\DevOps\docker-compose.yaml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalJira.Tests", "src\MinimalJira.Tests\MinimalJira.Tests.csproj", "{B1AEC76D-2CBA-42A8-A52C-69AB4F8978FF}"

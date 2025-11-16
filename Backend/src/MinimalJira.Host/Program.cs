@@ -1,5 +1,6 @@
 using FluentValidation;
 using MinimalJira.Application.Extensions;
+using MinimalJira.Host.Extensions;
 using MinimalJira.Host.Middleware;
 using MinimalJira.Host.Validators;
 using MinimalJira.Infrastructure.Extensions;
@@ -15,6 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog();
 
+Console.WriteLine(builder.Configuration.GetConnectionString("PostgreSQL"));
+Console.WriteLine(builder.Configuration.GetConnectionString("Redis"));
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddUseCases();
@@ -26,6 +30,8 @@ builder.Services.AddControllers();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 var app = builder.Build();
+
+app.ApplyMigrations();
 
 app.UseExceptionHandler(e => { });
 
