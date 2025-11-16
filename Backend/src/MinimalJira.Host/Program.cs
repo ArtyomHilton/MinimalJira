@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.OpenApi.Models;
 using MinimalJira.Application.Extensions;
 using MinimalJira.Host.Extensions;
 using MinimalJira.Host.Middleware;
@@ -20,7 +21,15 @@ Console.WriteLine(builder.Configuration.GetConnectionString("PostgreSQL"));
 Console.WriteLine(builder.Configuration.GetConnectionString("Redis"));
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "API для приложения MinimalJira",
+        Description = "Тестовое задание"
+    });
+});
 builder.Services.AddUseCases();
 builder.Services.AddDbContext(builder.Configuration);
 builder.Services.AddDistributedCache(builder.Configuration);

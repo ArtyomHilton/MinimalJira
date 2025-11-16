@@ -47,6 +47,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProjectResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProject([FromRoute] Guid id,
         [FromServices] IGetProjectByIdUseCase useCase,
@@ -58,6 +59,7 @@ public class ProjectController : ControllerBase
     }
     
     [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateProject([FromRoute] Guid id, 
@@ -79,6 +81,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteProject([FromRoute] Guid id,
         [FromServices] IDeleteProjectUseCase useCase,

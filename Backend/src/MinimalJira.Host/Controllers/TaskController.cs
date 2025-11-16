@@ -47,6 +47,7 @@ public class TaskController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(TaskResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTask([FromRoute] Guid id,
         [FromServices] IGetTaskByIdUseCase useCase,
@@ -58,6 +59,8 @@ public class TaskController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateTask([FromRoute] Guid id,
         [FromBody] UpdateTaskRequest request,
@@ -78,6 +81,7 @@ public class TaskController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteTask([FromRoute] Guid id,
         [FromServices] IDeleteTaskUseCase useCase,
