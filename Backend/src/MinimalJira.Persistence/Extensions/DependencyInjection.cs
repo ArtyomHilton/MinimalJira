@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MinimalJira.Persistence.Context;
+using MinimalJira.Persistence.Seeding;
 
 namespace MinimalJira.Persistence.Extensions;
 
@@ -26,6 +27,7 @@ public static class DependencyInjection
                 {
                     builder.EnableRetryOnFailure(5);
                 });
+            SeedingProjectsWithTasks.SeedingConfigure(options);
         });
 
         return serviceCollection;
