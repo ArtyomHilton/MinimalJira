@@ -17,9 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog();
 
-Console.WriteLine(builder.Configuration.GetConnectionString("PostgreSQL"));
-Console.WriteLine(builder.Configuration.GetConnectionString("Redis"));
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -40,7 +37,7 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 var app = builder.Build();
 
-app.ApplyMigrations();
+await app.ApplyMigrations();
 
 app.UseExceptionHandler(e => { });
 
