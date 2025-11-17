@@ -87,7 +87,12 @@ public class ProjectControllerTests
 
         var pagination = new Pagination(1, 10);
 
-        var controllerResult = await _controller.GetProjects(pagination, useCaseMock.Object, CancellationToken.None);
+        var validatorMock = new Mock<IValidator<Pagination>>();
+        validatorMock.Setup(validator => validator.ValidateAsync(pagination, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
+
+        var controllerResult = await _controller.GetProjects(pagination, useCaseMock.Object, validatorMock.Object,
+            CancellationToken.None);
 
         var result = Assert.IsType<OkObjectResult>(controllerResult);
         Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
@@ -220,31 +225,31 @@ public class ProjectControllerTests
         var projectId = Guid.Parse("D87A5554-C541-4681-B28F-2E3B71954B92");
 
         var command = ProjectMappers.ToCommand(projectId);
-        
+
         var useCaseMock = new Mock<IDeleteProjectUseCase>();
         useCaseMock.Setup(useCase => useCase.ExecuteAsync(command, It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         var controllerResult = await _controller.DeleteProject(projectId, useCaseMock.Object, CancellationToken.None);
-        
+
         var result = Assert.IsType<NoContentResult>(controllerResult);
         Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
     }
-    
+
     [Fact]
     public async Task DeleteProject_ProjectNotFoundTest()
     {
         var projectId = Guid.Parse("D87A5554-C541-4681-B28F-2E3B71954B92");
 
         var command = ProjectMappers.ToCommand(projectId);
-        
+
         var useCaseMock = new Mock<IDeleteProjectUseCase>();
         useCaseMock.Setup(useCase => useCase.ExecuteAsync(command, It.IsAny<CancellationToken>()))
             .ThrowsAsync(new NotFoundException($"Проект c Id: {command.Id} не найден!"));
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
-                await _controller.DeleteProject(projectId, useCaseMock.Object, CancellationToken.None));
-        
+            await _controller.DeleteProject(projectId, useCaseMock.Object, CancellationToken.None));
+
         Assert.Equal($"Проект c Id: {command.Id} не найден!", exception.Message);
     }
 }

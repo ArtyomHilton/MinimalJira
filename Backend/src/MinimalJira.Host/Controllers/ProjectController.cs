@@ -36,11 +36,20 @@ public class ProjectController : ControllerBase
     }
     
     [HttpGet]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ICollection<ProjectResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProjects([FromQuery] Pagination pagination,
         [FromServices] IGetProjectsUseCase useCase,
+        [FromServices] IValidator<Pagination> validator,
         CancellationToken cancellationToken)
     {
+        var validationResult = await validator.ValidateAsync(pagination, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.ToResponse());
+        }
+        
         var result = await useCase.ExecuteAsync(pagination.ToQuery(), cancellationToken);
 
         return Ok(result.ToResponse());
